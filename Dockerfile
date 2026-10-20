@@ -1,18 +1,15 @@
 
+
 FROM maven:3.9-eclipse-temurin-8 AS builder
 
 WORKDIR /app
 
 COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
-
 COPY src ./src
-RUN ./mvnw package -DskipTests
 
-FROM eclipse-temurin:8-jre-noble
+RUN mvn -B clean package -DskipTests
+
+FROM eclipse-temurin:8-jre
 
 WORKDIR /app
 
